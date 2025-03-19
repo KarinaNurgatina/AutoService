@@ -1,0 +1,21 @@
+﻿@model AutoService.Web.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Вход";
+}
+
+<h2>Вход</h2>
+
+<form asp-action="Login" method="post">
+    <div class="mb-3">
+        <label>Email</label>
+        <input type="email" class="form-control" asp-for="Email" required />
+    </div>
+    <div class="mb-3">
+        <label>Пароль</label>
+        <input type="password" class="form-control" asp-for="Password" required />
+    </div>
+    <div class="mb-3">
+        <input type="checkbox" asp-for="RememberMe" /> Запомнить меня
+    </div>
+    <button type="submit" class="btn btn-primary">Войти</button>
+</form>

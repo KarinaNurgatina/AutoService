@@ -1,0 +1,68 @@
+﻿@model AutoService.Web.Models.Request
+
+@{
+    Layout = "_Layout";
+}
+
+
+
+<h2 class="text-center">Создать новую заявку</h2>
+
+<form asp-action="Create" method="post">
+    @Html.AntiForgeryToken() <!-- CSRF-защита -->
+
+    <div class="mb-3">
+        <label class="form-label">Имя клиента</label>
+        <input type="text" class="form-control" asp-for="ClientName" name="ClientName" required />
+        <span class="text-danger" asp-validation-for="ClientName"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Тип услуги</label>
+        <input type="text" class="form-control" asp-for="ServiceType" name="ServiceType" required />
+        <span class="text-danger" asp-validation-for="ServiceType"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Статус</label>
+        <select class="form-select" asp-for="Status" name="Status" required>
+            <option value="">-- Выберите статус --</option>
+            <option value="В обработке">В обработке</option>
+            <option value="Принята">Принята</option>
+            <option value="Завершена">Завершена</option>
+        </select>
+        <span class="text-danger" asp-validation-for="Status"></span>
+    </div>
+    <a href="@Url.Action("Index", "Requests")" class="btn btn-secondary">Назад</a>
+
+    <button type="submit" class="btn btn-success">Отправить заявку</button>
+</form>
+<form id="createForm" method="post" action="@Url.Action("Create", "Requests")">
+    <div class="form-group">
+        <label for="ClientName">Клиент:</label>
+        <input type="text" id="ClientName" name="ClientName" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $("#createForm").submit(function (event) {
+            event.preventDefault(); // Останавливаем стандартную отправку формы
+
+            $.ajax({
+                url: $(this).attr("action"),
+                type: "POST",
+                data: $(this).serialize(),
+                success: function (data) {
+                    alert("Заявка добавлена!");
+                    loadPage(null, { href: "/Requests/Index" }); // Перенаправляем на список заявок
+                },
+                error: function () {
+                    alert("Ошибка при добавлении заявки.");
+                }
+            });
+        });
+    });
+</script>
+

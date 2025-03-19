@@ -1,0 +1,140 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - AutoService</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Добавляем jQuery -->
+</head>
+
+<body>
+    <partial name="_LoginPartial" />
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand">AutoService</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="Logout">Выйти</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="/Account/Login">Войти</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="/Account/Register">Регистрация</a>
+                        </li>
+                    }
+                </ul>
+
+                <partial name="_LoginPartial" /> <!-- ✅ Добавляем блок входа/регистрации -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div id="content">
+            @RenderBody()
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function loadPage(event, link) {
+            if (event) event.preventDefault(); // Останавливаем стандартный переход
+            var url = link.href;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                success: function (data) {
+                    var newContent = $('<div>').html(data);
+                    var newStyles = newContent.find("link[rel='stylesheet']");
+
+                    $('#content').html(newContent.find("#content").html());
+
+                    newStyles.each(function () {
+                        if ($("head link[href='" + $(this).attr("href") + "']").length === 0) {
+                            $("head").append($(this).clone());
+                        }
+                    });
+
+                    window.history.pushState(null, "", url);
+
+                    // Если была загрузка страницы "Список заявок", обновляем таблицу
+                    if (url.includes("Requests/Index")) {
+                        refreshTable();
+                    }
+                },
+                error: function () {
+                    $('#content').html('<h3 class="text-danger">Ошибка загрузки страницы.</h3>');
+                }
+            });
+        }
+
+        function refreshTable() {
+            $.ajax({
+                url: "/Requests/Index",
+                type: "GET",
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                success: function (data) {
+                    var newTable = $('<div>').html(data).find("table").html();
+                    $("table").html(newTable);
+                }
+            });
+        }
+    </script>
+    <script>
+        function loadPage(event, link) {
+            if (event) event.preventDefault();
+            var url = link.href;
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+                success: function (data) {
+                    $('#content').html($(data).find("#content").html());
+                    window.history.pushState({ url: url }, "", url);
+                },
+                error: function () {
+                    $('#content').html('<h3 class="text-danger">Ошибка загрузки страницы.</h3>');
+                }
+            });
+        }
+
+        window.onpopstate = function (event) {
+            if (event.state && event.state.url) {
+                $.ajax({
+                    url: event.state.url,
+                    type: 'GET',
+                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                    success: function (data) {
+                        $('#content').html($(data).find("#content").html());
+                    }
+                });
+            }
+        };
+    </script>
+    <script>
+        $(document).on("click", ".login-button", function (event) {
+            event.preventDefault();
+            window.location.href = $(this).attr("href");
+        });
+
+        $(document).on("click", ".register-button", function (event) {
+            event.preventDefault();
+            window.location.href = $(this).attr("href");
+        });
+    </script>
+</body>
+</html>

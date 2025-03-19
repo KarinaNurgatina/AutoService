@@ -1,0 +1,24 @@
+﻿@model AutoService.Web.Models.Request
+
+@{
+    Layout = "_Layout";
+}
+
+
+<h2>Удалить заявку?</h2>
+
+<p>Вы уверены, что хотите удалить эту заявку?</p>
+
+<ul class="list-group">
+    <li class="list-group-item"><strong>Клиент:</strong> @Model.ClientName</li>
+    <li class="list-group-item"><strong>Услуга:</strong> @Model.ServiceType</li>
+    <li class="list-group-item"><strong>Статус:</strong> @Model.Status</li>
+    <li class="list-group-item"><strong>Дата:</strong> @Model.RequestDate.ToString("dd.MM.yyyy HH:mm")</li>
+</ul>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">🗑 Удалить</button>
+    <button type="button" class="btn btn-secondary" onclick="window.history.back();">Отмена</button>
+</form>

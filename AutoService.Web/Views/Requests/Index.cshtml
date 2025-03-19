@@ -1,0 +1,40 @@
+﻿@model IEnumerable<AutoService.Web.Models.Request>
+
+@{
+    ViewData["Title"] = "Список заявок";
+}
+
+<h2 class="text-center">Список заявок</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Клиент</th>
+            <th>Услуга</th>
+            <th>Статус</th>
+            <th>Дата</th>
+            <th>Действия</th> <!-- Добавляем колонку с кнопками -->
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var request in Model)
+        {
+            <tr>
+                <td>@request.Id</td>
+                <td>@request.ClientName</td>
+                <td>@request.ServiceType</td>
+                <td>@request.Status</td>
+                <td>@request.RequestDate.ToString("dd.MM.yyyy HH:mm")</td>
+                <td>
+                    <a href="@Url.Action("Details", "Requests", new { id = request.Id })" class="btn btn-info btn-sm">👁 Подробнее</a>
+                    <a href="@Url.Action("Edit", "Requests", new { id = request.Id })" class="btn btn-warning btn-sm">✏ Редактировать</a>
+                    <a href="@Url.Action("Delete", "Requests", new { id = request.Id })" class="btn btn-danger btn-sm">🗑 Удалить</a>
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("Create", "Requests")" class="btn btn-primary">➕ Добавить заявку</a>

@@ -1,0 +1,16 @@
+﻿@model AutoService.Web.Models.Request
+
+@{
+    Layout = "_Layout";
+}
+
+<h2>Заявка №@Model.Id</h2>
+
+<ul class="list-group">
+    <li class="list-group-item"><strong>Клиент:</strong> @Model.ClientName</li>
+    <li class="list-group-item"><strong>Услуга:</strong> @Model.ServiceType</li>
+    <li class="list-group-item"><strong>Статус:</strong> @Model.Status</li>
+    <li class="list-group-item"><strong>Дата:</strong> @Model.RequestDate.ToString("dd.MM.yyyy HH:mm")</li>
+</ul>
+
+<button type="button" class="btn btn-secondary mt-3" onclick="window.history.back();">Назад</button>

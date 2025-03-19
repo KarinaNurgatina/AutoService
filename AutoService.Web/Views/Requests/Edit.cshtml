@@ -1,0 +1,37 @@
+﻿@model AutoService.Web.Models.Request
+
+@{
+    Layout = "_Layout";
+}
+
+<h2>Редактировать заявку</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label class="form-label">Имя клиента</label>
+        <input type="text" class="form-control" asp-for="ClientName" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Тип услуги</label>
+        <input type="text" class="form-control" asp-for="ServiceType" required />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Статус</label>
+        <select class="form-select" asp-for="Status">
+            <option value="В обработке">В обработке</option>
+            <option value="Принята">Принята</option>
+            <option value="Завершена">Завершена</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Сохранить изменения</button>
+</form>
+
+<a href="javascript:history.back();" class="btn btn-secondary mt-3">Назад</a>
+ 

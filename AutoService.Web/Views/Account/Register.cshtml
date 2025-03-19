@@ -1,0 +1,23 @@
+﻿@model AutoService.Web.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Регистрация";
+}
+
+<h2>Регистрация</h2>
+
+<form asp-action="Register" method="post">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label>Email</label>
+        <input type="email" class="form-control" asp-for="Email" required />
+    </div>
+    <div class="mb-3">
+        <label>Пароль</label>
+        <input type="password" class="form-control" asp-for="Password" required />
+    </div>
+    <div class="mb-3">
+        <label>Подтверждение пароля</label>
+        <input type="password" class="form-control" asp-for="ConfirmPassword" required />
+    </div>
+    <button type="submit" class="btn btn-success">Зарегистрироваться</button>
+</form>
